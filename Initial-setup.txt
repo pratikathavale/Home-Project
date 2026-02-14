@@ -1,0 +1,53 @@
+fdisk -l
+/dev/sdb
+wipefs /dev/sdb
+wipefs /dev/sdb1
+wipefs -a /dev/sdb
+wipefs -a /dev/sdb1
+gdisk /dev/sdb
+--> o
+--> Y
+--> n
+keep the default value
+w
+Y
+fdisk -l /dev/sdb
+ls -la /dev/disk/by-id
+vi /etc/fstab
+/dev/disk/by-id/{id} /mnt/ssd1 ext4 defaults,noatime,discard 0 2
+mkfs.ext4 /dev/disk/by-id/{id}
+mkdir /mnt/ssd1
+mount -a
+systemctl daemon-reload
+mount
+apt install duf
+duf
+apt install docker
+curl -fsSL https://tailscale.com/install.sh | sh
+tailscale up --ssh
+
+# 1. Install required packages
+sudo apt update
+sudo apt install -y ca-certificates curl gnupg lsb-release
+
+# 2. Add Docker’s official GPG key
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+# 3. Set up the Docker repository
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+  https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# 4. Update package index again
+sudo apt update
+
+# 5. Install Docker CLI
+sudo apt install docker-ce-cli
+
+Whatsapp
+EAARgSaEWHKkBQIDq5iBR9iKtZBnTzzccDTy9ZAjgve1OiN8i1A8WD6SIXGHWngtVYBteAXYAPmQ6llWnIl8nsQixBvvGmoFCoZC3SZBlw1TdlEZArjOOCKMg21nc8U1ewWXysfjLg54JxvA5uzZAJkZBde9IuIOw4JDKH26DwtxldtfaIhw52cBZCPAgxxqxK8DjV25pdmHrytQrNKYPSHLT0muImgyui04kNpCXzAZB4d0wYMeJhwMR9omwZClPs3NoSJkOZBoULFghownNbpuPVy2k4cZD
+tskey-auth-kBZirUSRpx11CNTRL-xJh8KnkBShKFxcYGfbKwhKG8Exqrgbuh8
+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

@@ -1,0 +1,23 @@
+services:
+  jellyfin-ts:
+    image: tailscale/tailscale:latest
+    hostname: jellyfin
+    environment:
+      - TS_AUTHKEY= tskey-auth-kzWzYQDcmp11CNTRL-7cCimVc6eGPgrf9wiXtTHPwqXbP4C8GJ #Update Key from portal#
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_SERVE_CONFIG=/config/jellyseerr.json
+      - TS_USERSPACE=true
+    volumes:
+      - /mnt/ssd1/appdata/jellyfin/ts-config:/config
+      - /mnt/ssd1/appdata/jellyfin/ts-state:/var/lib/tailscale
+    restart: unless-stopped
+  jellyfin:
+    image: ghcr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    volumes:
+      - /mnt/ssd1/data/jellyfin/:/data
+    network_mode: service:jellyfin-ts
+    restart: unless-stopped
+
+volumes:
+  model-cache:
