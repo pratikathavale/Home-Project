@@ -1,0 +1,28 @@
+services:
+  n8n-ts:
+    image: tailscale/tailscale:latest
+    hostname: n8n
+    environment:
+      - TS_AUTHKEY=tskey-auth-knf5heuHP921CNTRL-s42rgcg6CS8WBv8wfT56S8ELZgZp1ciR1
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_SERVE_CONFIG=/config/n8n.json
+      - TS_USERSPACE=true
+    volumes:
+      - /mnt/ssd1/appdata/n8n/ts-config:/config
+      - /mnt/ssd1/appdata/n8n/ts-state:/var/lib/tailscale
+    restart: unless-stopped
+  n8n:
+    image: n8nio/n8n
+    restart: always
+    environment:
+      - N8N_HOST={{n8n-tailscale}} # Use the hostname of the tailscale container
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - NODE_ENV=production
+      - WEBHOOK_URL=http://{{n8n-tailscale}}:5678/
+    volumes:
+      - n8n_data:/home/node/.n8n
+    network_mode: "service:tailscale" # This is the key for tailscale integration
+
+volumes:
+  n8n_data:

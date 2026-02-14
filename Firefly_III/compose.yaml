@@ -1,0 +1,51 @@
+services:
+  firefly-ts:
+    image: tailscale/tailscale:latest
+    hostname: firefly
+    environment:
+      - TS_AUTHKEY=tskey-auth-kWEiw3Mp4H11CNTRL-nqotckW4sqYPthCybxnkpYA5SVJgnGij
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_SERVE_CONFIG=/config/firefly.json
+      - TS_USERSPACE=true
+    volumes:
+      - /mnt/ssd1/appdata/firefly/ts-config:/config
+      - /mnt/ssd1/appdata/firefly/ts-state:/var/lib/tailscale
+    depends_on:
+      - firefly-server
+    restart: unless-stopped
+
+  firefly-server:
+    image: fireflyiii/core:latest
+    container_name: fireflyiii
+    depends_on:
+      - db
+    environment:
+      - APP_KEY=base64:ReplaceThisWithARealAppKey==
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_CONNECTION=mysql
+      - DB_DATABASE=firefly
+      - DB_USERNAME=firefly
+      - DB_PASSWORD=secret_firefly_password
+      - TRUSTED_PROXIES=**
+      - SITE_OWNER=you@example.com
+    volumes:
+      - /mnt/ssd1/appdata/firefly/firefly_upload:/var/www/html/storage/upload
+    network_mode: "service:firefly-ts"
+    restart: always
+
+  db:
+    image: mariadb:10.6
+    container_name: fireflydb
+    environment:
+      - MYSQL_DATABASE=firefly
+      - MYSQL_USER=firefly
+      - MYSQL_PASSWORD=secret_firefly_password
+      - MYSQL_ROOT_PASSWORD=root_password
+    volumes:
+      - /mnt/ssd1/appdata/firefly/firefly_db:/var/lib/mysql
+    restart: always
+
+volumes:
+  firefly_upload:
+  firefly_db:

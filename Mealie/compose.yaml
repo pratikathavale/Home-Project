@@ -1,0 +1,67 @@
+services:
+  mealie-ts:
+    image: tailscale/tailscale:latest
+    hostname: mealie
+    environment:
+      - TS_AUTHKEY=tskey-auth-kBUtpRDcKe11CNTRL-pRWFeyDUg8LXHaPrCvfm9Ln9k7Fkr3Ny
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_SERVE_CONFIG=/config/server.json
+      - TS_USERSPACE=true
+    volumes:
+      - /mnt/ssd1/appdata/mealie/ts-config/server.json:/config/server.json
+      - /mnt/ssd1/appdata/mealie/ts-state:/var/lib/tailscale
+    restart: unless-stopped
+    cap_add:
+      - net_admin
+      - sys_module
+
+  #gemini-proxy:
+    # This service translates OpenAI API calls into Gemini API calls
+   # image: admibo/gemini-openai-proxy
+    #container_name: gemini-proxy
+    #restart: unless-stopped
+    # The proxy joins the tailscale container's network to be accessible by Mealie
+    #network_mode: service:mealie-ts
+    #environment:
+      # ⚠️ IMPORTANT: Replace with your actual Gemini API Key
+     # - GEMINI_API_KEY=AIzaSyBqDni2u5GnpRSyRfrFFHOWZ-sKmpkFwLk
+      # You can optionally set a default model here if needed
+      #- MODEL_NAME=gemini-1.5-flash-latest
+
+  mealie:
+    image: ghcr.io/mealie-recipes/mealie:v3.2.1
+    container_name: mealie
+    restart: unless-stopped
+    # This makes the mealie container use the network of the mealie-ts container
+    network_mode: service:mealie-ts
+    #depends_on:
+      #- gemini-proxy # Ensures the proxy starts before Mealie
+    deploy:
+      resources:
+        limits:
+          memory: 1000M
+    volumes:
+      - /mnt/ssd1/appdata/mealie/app:/app/data/
+    environment:
+      # --- General Mealie Settings ---
+      ALLOW_SIGNUP: "false"
+      PUID: 1000
+      PGID: 1000
+      TZ: Europe/Berlin
+      BASE_URL: https://mealie.tailffeb2f.ts.net/
+      # Email Configuration
+      SMTP_HOST: smtp.gmail.com
+      SMTP_PORT: 587
+      SMTP_FROM_NAME: Mealie
+      SMTP_AUTH_STRATEGY: TLS # Options: 'TLS', 'SSL', 'NONE'
+      SMTP_FROM_EMAIL: pratikathavale@gmail.com
+      SMTP_USER: pratikathavale@gmail.com
+      SMTP_PASSWORD: "weobiyuehcqiwomo"
+
+      # --- Gemini Integration Settings ---
+      # This points Mealie to our new gemini-proxy service
+      #OPENAI_BASE_URL: http://localhost:8080/v1
+      # The model you want Mealie to use (must be supported by Gemini)
+      #OPENAI_MODEL: gemini-1.5-flash-latest
+      # The proxy handles the real API key, so you can use any non-empty value here
+      OPENAI_API_KEY: "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"

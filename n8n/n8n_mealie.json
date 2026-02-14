@@ -1,0 +1,112 @@
+{
+  "name": "Mealie Recipe Generator with OpenAI",
+  "nodes": [
+    {
+      "id": "1",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [200, 300],
+      "parameters": {
+        "path": "mealie-recipe",
+        "method": "POST"
+      }
+    },
+    {
+      "id": "2",
+      "name": "OpenAI - Recipe",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 2,
+      "position": [450, 300],
+      "credentials": {
+        "openAiApi": "OpenAI API"
+      },
+      "parameters": {
+        "resource": "chat",
+        "operation": "createChatCompletion",
+        "model": "gpt-5-mini",
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are a recipe assistant. Always return valid JSON with fields: title, ingredients, steps."
+          },
+          {
+            "role": "user",
+            "content": "Generate a dinner recipe with chicken, under 600 calories."
+          }
+        ],
+        "options": {
+          "maxTokens": 600
+        }
+      }
+    },
+    {
+      "id": "3",
+      "name": "Extract Usage",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [700, 300],
+      "parameters": {
+        "fields": {
+          "tokens_prompt": "={{ $json[\"usage\"][\"prompt_tokens\"] }}",
+          "tokens_completion": "={{ $json[\"usage\"][\"completion_tokens\"] }}",
+          "tokens_total": "={{ $json[\"usage\"][\"total_tokens\"] }}"
+        }
+      }
+    },
+    {
+      "id": "4",
+      "name": "Send to Mealie",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [950, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "http://YOUR-MEALIE-HOST:9000/api/recipes/",
+        "authentication": "headerAuth",
+        "jsonParameters": true,
+        "options": {},
+        "headerAuth": {
+          "name": "Authorization",
+          "value": "Bearer YOUR_MEALIE_API_TOKEN"
+        },
+        "bodyParametersJson": "={{ $json[\"choices\"][0][\"message\"][\"content\"] }}"
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "OpenAI - Recipe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI - Recipe": {
+      "main": [
+        [
+          {
+            "node": "Extract Usage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Usage": {
+      "main": [
+        [
+          {
+            "node": "Send to Mealie",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

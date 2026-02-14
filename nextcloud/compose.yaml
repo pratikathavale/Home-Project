@@ -1,0 +1,47 @@
+services:
+  nextcloud-ts:
+    image: tailscale/tailscale:latest
+    hostname: nextcloud
+    environment:
+      - TS_AUTHKEY=tskey-auth-kofuqnjXFk11CNTRL-Cp9NfgMSPzE99fgXFfQS1F1LQiDVeLpVA #Update Key from portal#
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_SERVE_CONFIG=/config/nextcloud.json
+      - TS_USERSPACE=true
+    volumes:
+      - /mnt/ssd1/appdata/nextcloud/ts-config:/config
+      - /mnt/ssd1/appdata/nextcloud/ts-state:/var/lib/tailscale
+    restart: unless-stopped
+
+  nextcloud:
+    image: nextcloud:latest
+    container_name: nextcloud
+    restart: unless-stopped
+    network_mode: service:nextcloud-ts
+    # ports:
+    #   - "8080:80"
+    volumes:
+      - /mnt/ssd1/data/nextcloud_data:/var/www/html
+    environment:
+      - MYSQL_PASSWORD=secret
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_HOST=db
+    depends_on:
+      - db
+
+  db:
+    image: mariadb:latest
+    container_name: nextcloud_db
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=supersecret
+      - MYSQL_PASSWORD=secret
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+    volumes:
+      - /mnt/ssd1/appdata/nextcloud/db_data:/var/lib/mysql
+
+volumes:
+  nextcloud_data:
+  db_data:
+  tailscale_state:
