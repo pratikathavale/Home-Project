@@ -3,7 +3,7 @@ services:
     image: tailscale/tailscale:latest
     hostname: n8n
     environment:
-      - TS_AUTHKEY=tskey-auth-knf5heuHP921CNTRL-s42rgcg6CS8WBv8wfT56S8ELZgZp1ciR1
+      - TS_AUTHKEY=tskey-auth- #Update Key from portal#
       - TS_STATE_DIR=/var/lib/tailscale
       - TS_SERVE_CONFIG=/config/n8n.json
       - TS_USERSPACE=true

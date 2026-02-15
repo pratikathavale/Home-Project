@@ -3,7 +3,7 @@ services:
     image: tailscale/tailscale:latest
     hostname: jellyfin
     environment:
-      - TS_AUTHKEY= tskey-auth-kzWzYQDcmp11CNTRL-7cCimVc6eGPgrf9wiXtTHPwqXbP4C8GJ #Update Key from portal#
+      - TS_AUTHKEY= tskey-auth- #Update Key from portal#
       - TS_STATE_DIR=/var/lib/tailscale
       - TS_SERVE_CONFIG=/config/jellyseerr.json
       - TS_USERSPACE=true
