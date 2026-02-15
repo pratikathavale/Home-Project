@@ -3,7 +3,7 @@ services:
     image: tailscale/tailscale:latest
     hostname: mealie
     environment:
-      - TS_AUTHKEY=tskey-auth-kBUtpRDcKe11CNTRL-pRWFeyDUg8LXHaPrCvfm9Ln9k7Fkr3Ny
+      - TS_AUTHKEY=tskey-auth-
       - TS_STATE_DIR=/var/lib/tailscale
       - TS_SERVE_CONFIG=/config/server.json
       - TS_USERSPACE=true
@@ -64,4 +64,4 @@ services:
       # The model you want Mealie to use (must be supported by Gemini)
       #OPENAI_MODEL: gemini-1.5-flash-latest
       # The proxy handles the real API key, so you can use any non-empty value here
-      OPENAI_API_KEY: "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"
+      OPENAI_API_KEY: "some-placeholder-key"

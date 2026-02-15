@@ -3,7 +3,7 @@ services:
     image: tailscale/tailscale:latest
     hostname: firefly
     environment:
-      - TS_AUTHKEY=tskey-auth-kWEiw3Mp4H11CNTRL-nqotckW4sqYPthCybxnkpYA5SVJgnGij
+      - TS_AUTHKEY=tskey-auth- #Update Key from portal#
       - TS_STATE_DIR=/var/lib/tailscale
       - TS_SERVE_CONFIG=/config/firefly.json
       - TS_USERSPACE=true

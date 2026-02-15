@@ -3,7 +3,7 @@ services:
     image: tailscale/tailscale:latest
     hostname: checkmk
     environment:
-      - TS_AUTHKEY=tskey-auth-kw7bPWvda611CNTRL-wJUcNhM265MajTLrdzE54MdUkuvafEhve #Update Key from portal#
+      - TS_AUTHKEY=tskey-auth- #Update Key from portal#
       - TS_STATE_DIR=/var/lib/tailscale
       - TS_SERVE_CONFIG=/config/checkmk.json
       - TS_USERSPACE=true
