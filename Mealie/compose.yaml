@@ -24,7 +24,7 @@ services:
     #network_mode: service:mealie-ts
     #environment:
       # ⚠️ IMPORTANT: Replace with your actual Gemini API Key
-     # - GEMINI_API_KEY=AIzaSyBqDni2u5GnpRSyRfrFFHOWZ-sKmpkFwLk
+    # - GEMINI_API_KEY=${GEMINI_API_KEY}
       # You can optionally set a default model here if needed
       #- MODEL_NAME=gemini-1.5-flash-latest
 
@@ -56,7 +56,7 @@ services:
       SMTP_AUTH_STRATEGY: TLS # Options: 'TLS', 'SSL', 'NONE'
       SMTP_FROM_EMAIL: pratikathavale@gmail.com
       SMTP_USER: pratikathavale@gmail.com
-      SMTP_PASSWORD: "weobiyuehcqiwomo"
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
 
       # --- Gemini Integration Settings ---
       # This points Mealie to our new gemini-proxy service
@@ -64,4 +64,4 @@ services:
       # The model you want Mealie to use (must be supported by Gemini)
       #OPENAI_MODEL: gemini-1.5-flash-latest
       # The proxy handles the real API key, so you can use any non-empty value here
-      OPENAI_API_KEY: "some-placeholder-key"
+      OPENAI_API_KEY: ${OPENAI_API_KEY}

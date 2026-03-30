@@ -1,0 +1,13 @@
+*.env
+.env
+.env.*
+# Common private key/certificate formats
+*.key
+*.pem
+*.crt
+# Ignore secrets directory
+/secrets/
+# n8n credentials
+credentials.json
+# Mealie and other app secrets
+*.secret

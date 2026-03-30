@@ -31,7 +31,7 @@ services:
     network_mode: "service:checkmk-ts"
     environment:
       - CMK_SITE_ID=check_mk
-      - CMK_PASSWORD=Welcome@123#
+      - CMK_PASSWORD=${CMK_PASSWORD}
       - CMK_LIVESTATUS_TCP=on
       # Optional: change Apache port inside container if you like
       - APACHE_TCP_PORT=5000

@@ -68,7 +68,7 @@
         "options": {},
         "headerAuth": {
           "name": "Authorization",
-          "value": "Bearer YOUR_MEALIE_API_TOKEN"
+          "value": "Bearer ${MEALIE_API_TOKEN}"
         },
         "bodyParametersJson": "={{ $json[\"choices\"][0][\"message\"][\"content\"] }}"
       }
